@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cat Facts Dataset: A Random Sourced Cat Fact, Free JSON and CSV</title>
+<meta name="description" content="A random cat fact from an open dataset of sourced cat facts. Each fact links to its outside source and to the Cat Trivia Games article it comes from. Free JSON and CSV under CC BY 4.0.">
+<link rel="canonical" href="https://cattriviagames.github.io/cat-facts-dataset/">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#fdfcf9">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cat Facts Dataset: A Random Sourced Cat Fact">
+<meta property="og:description" content="Short cat facts, each with its outside source. Free JSON and CSV under CC BY 4.0, from Cat Trivia Games.">
+<meta property="og:url" content="https://cattriviagames.github.io/cat-facts-dataset/">
+<meta property="og:image" content="https://cattriviagames.com/img/why-do-cats-like-boxes-hero-v1.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23b45309'/%3E%3Cpath d='M16 46V20l9 8h14l9-8v26c0 4-4 6-16 6s-16-2-16-6z' fill='%23fff'/%3E%3Ccircle cx='26' cy='38' r='2.6' fill='%23b45309'/%3E%3Ccircle cx='38' cy='38' r='2.6' fill='%23b45309'/%3E%3C/svg%3E">
+<style>
+/* Tokens follow the Cat Trivia Games editorial ("solid") pages, which stay light in every color scheme. */
+:root{
+  --ink:#22201d; --ink-2:#5f574d; --amber:#b45309; --amber-deep:#92400e; --hair:#e7e2da;
+  --warm:#fdfcf9; --tint:#faf5ec; --card:#fff; --link:#6d35d6; --focus:#6d35d6;
+  --serif:Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);color:var(--ink);background:var(--warm);line-height:1.65;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(900px 360px at 50% -8%,rgba(245,130,42,.10),transparent 60%)}
+a{color:var(--amber);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:hover{color:var(--amber-deep)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+.wrap{max-width:720px;margin:0 auto;padding:1.4rem 16px 3rem}
+@media (min-width:560px){.wrap{padding:2rem 24px 4rem}}
+.crumb{font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);font-weight:700;margin-bottom:.5rem}
+.crumb a{color:var(--amber);text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+h1{font-family:var(--serif);font-size:clamp(1.9rem,6vw,2.6rem);line-height:1.15;letter-spacing:-.01em;margin:.1rem 0 .7rem}
+h2{font-family:var(--serif);font-size:1.45rem;line-height:1.25;margin:2.4rem 0 .6rem}
+p{margin:.85rem 0}
+.lede{font-size:1.1rem;color:var(--ink)}
+.muted{color:var(--ink-2)}
+
+/* the fact card */
+.card{position:relative;margin:1.4rem 0 1rem;border:1px solid var(--hair);border-radius:20px;background:var(--card);
+  box-shadow:0 10px 30px rgba(60,30,10,.08);overflow:hidden}
+.card::before{content:"";display:block;height:6px;background:linear-gradient(90deg,#c2410c,#be185d 38%,#6a32c9 68%,#0f766e)}
+.card-body{padding:1.15rem 1rem 1.2rem}
+@media (min-width:560px){.card-body{padding:1.5rem 1.6rem 1.5rem}}
+.chip{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .65rem;border-radius:999px;font-size:.75rem;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;background:var(--kt,#f3ede4);color:var(--k,#5f574d)}
+.c-anatomy{--k:#9a3412;--kt:#ffedd5}.c-behavior{--k:#5b21b6;--kt:#ede9fe}.c-history{--k:#7c2d12;--kt:#fef3c7}
+.c-breeds{--k:#9d174d;--kt:#fce7f3}.c-genetics{--k:#0b6158;--kt:#ccfbf1}.c-records{--k:#1e40af;--kt:#dbeafe}
+.c-culture{--k:#6b4100;--kt:#fff0c7}.c-science{--k:#17643a;--kt:#dcfce7}
+.fact{font-family:var(--serif);font-size:clamp(1.25rem,4.4vw,1.55rem);line-height:1.4;margin:.8rem 0 .9rem;overflow-wrap:anywhere}
+.meta{font-size:.95rem;color:var(--ink-2);margin:.35rem 0;overflow-wrap:anywhere}
+.meta a{font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;min-height:44px;padding:.55rem 1.15rem;
+  border:2px solid transparent;border-radius:999px;font:inherit;font-size:1rem;font-weight:700;line-height:1.2;cursor:pointer;
+  background:var(--amber);color:#fff;touch-action:manipulation;text-decoration:none}
+.btn:hover{background:var(--amber-deep);color:#fff}
+.btn-ghost{background:#fff;color:var(--ink);border-color:var(--hair)}
+.btn-ghost:hover{background:#fff7ed;border-color:var(--amber);color:var(--ink)}
+.btn svg{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.status{min-height:1.4em;font-size:.92rem;color:#17643a;font-weight:600;margin:.5rem 0 0}
+
+/* category filter */
+.filter{border:0;padding:0;margin:0}
+.filter legend{font-weight:700;margin-bottom:.45rem;padding:0}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem}
+.chips button{min-height:44px;padding:.35rem .85rem;border-radius:999px;border:1.5px solid var(--hair);background:#fff;color:var(--ink);
+  font:inherit;font-size:.92rem;font-weight:600;cursor:pointer}
+.chips button:hover{border-color:var(--amber)}
+.chips button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* data and credit boxes */
+.box{border:1px solid var(--hair);border-radius:14px;background:var(--tint);padding:.85rem 1rem;margin:.8rem 0}
+code,.code{font-family:var(--mono);font-size:.88rem}
+.code{display:block;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;background:#fff;border:1px solid var(--hair);
+  border-radius:10px;padding:.6rem .75rem;margin:.5rem 0}
+.box p{margin:0}
+.credit{font-weight:700;overflow-wrap:anywhere}
+ul.plain{padding-left:1.2rem}
+ul.plain li{margin:.35rem 0}
+
+/* links to the games, in the site's related-card style */
+.more{display:grid;grid-template-columns:1fr;gap:.7rem;margin:1rem 0}
+@media (min-width:600px){.more{grid-template-columns:repeat(3,1fr)}}
+.relcard{display:flex;flex-direction:column;gap:.15rem;padding:.85rem 1rem;border:1.5px solid var(--hair);border-radius:16px;background:#fff;
+  color:var(--ink);text-decoration:none;box-shadow:0 2px 8px rgba(60,30,10,.05)}
+.relcard:hover{border-color:var(--amber);background:#fffaf3;color:var(--ink)}
+.rc-term{font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--amber)}
+.rc-title{font-family:var(--serif);font-weight:700;font-size:1.1rem;line-height:1.3}
+.rc-desc{font-size:.9rem;color:var(--ink-2)}
+footer{margin-top:2.6rem;padding-top:1rem;border-top:1px solid var(--hair);font-size:.92rem;color:var(--ink-2)}
+@media (prefers-reduced-motion:no-preference){
+  .fact.is-new{animation:factin .28s ease-out}
+  .btn,.chips button,.relcard{transition:background-color .15s ease,border-color .15s ease}
+}
+@keyframes factin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="https://cattriviagames.com/">Cat Trivia Games</a> / Cat facts dataset</nav>
+  <h1>Cat Facts Dataset: A Random Sourced Cat Fact</h1>
+  <p class="lede">An open set of short cat facts. Each one comes from an article on <a href="https://cattriviagames.com/">Cat Trivia Games</a>, links to the outside source that article cites, and is free to reuse under CC BY 4.0.</p>
+
+  <section class="card" aria-labelledby="factHeading">
+    <div class="card-body">
+      <h2 id="factHeading" class="visually-hidden">Random cat fact</h2>
+      <span class="chip" id="factCat" hidden></span>
+      <p class="fact" id="fact" aria-live="polite">Loading a cat fact...</p>
+      <p class="meta" id="factSource" hidden>Source: <a id="sourceLink" href="#" rel="noopener"></a></p>
+      <p class="meta" id="factArticle" hidden><a id="articleLink" href="#">Read the article on Cat Trivia Games</a></p>
+      <div class="actions">
+        <button type="button" class="btn" id="nextBtn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+          Another fact
+        </button>
+        <button type="button" class="btn btn-ghost" id="copyBtn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+          Copy with credit
+        </button>
+        <button type="button" class="btn btn-ghost" id="linkBtn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+          Copy link
+        </button>
+      </div>
+      <p class="status" id="status" role="status"></p>
+    </div>
+  </section>
+
+  <fieldset class="filter">
+    <legend>Pick from a category</legend>
+    <div class="chips" id="chips"></div>
+  </fieldset>
+  <p class="muted" id="countLine"></p>
+  <noscript><p>This page needs JavaScript to pick a fact. The full list is in <a href="facts.json">facts.json</a> and <a href="facts.csv">facts.csv</a>.</p></noscript>
+
+  <h2 id="data">Get the data</h2>
+  <p>Download <a href="facts.json">facts.json</a> or <a href="facts.csv">facts.csv</a>, or load them from the jsDelivr CDN so your app never calls the Cat Trivia Games site:</p>
+  <span class="code" id="cdnUrl">https://cdn.jsdelivr.net/gh/cattriviagames/cat-facts-dataset@main/facts.json</span>
+  <p>Each fact has an <code>id</code>, the <code>fact</code> sentence, a <code>category</code>, the <code>source_title</code> and <code>source_url</code> of its outside source, the <code>article_url</code> it comes from, and the date it was <code>added</code>. The <a href="https://github.com/cattriviagames/cat-facts-dataset">GitHub repository</a> has the field notes and example scripts in JavaScript and Python.</p>
+
+  <h2 id="credit">Credit</h2>
+  <p>The facts are free to copy, share and adapt, including commercially, under the <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">Creative Commons Attribution 4.0 license</a>. Show this line wherever you use them:</p>
+  <div class="box"><p class="credit" id="creditLine">Cat facts from Cat Trivia Games, https://cattriviagames.com, CC BY 4.0</p></div>
+
+  <h2 id="checked">How the facts are checked</h2>
+  <p>Every fact is a sentence that a published Cat Trivia Games article states and cites. Before a fact went in, its wording was checked against that outside source, and facts the source did not support were left out. A fact about one study or one registry rule reports what that source found, and nothing here is veterinary advice. How the articles are written and corrected is in the <a href="https://cattriviagames.com/about/editorial-policy">editorial policy</a>. To report a fact that is wrong, open an issue on GitHub with its id.</p>
+
+  <h2 id="play">Play cat trivia</h2>
+  <div class="more">
+    <a class="relcard" href="https://cattriviagames.com/daily"><span class="rc-term">Every day</span><span class="rc-title">Daily Cat Trivia</span><span class="rc-desc">Five new questions with explanations.</span></a>
+    <a class="relcard" href="https://cattriviagames.com/battle"><span class="rc-term">With friends</span><span class="rc-title">Cat Trivia Battle</span><span class="rc-desc">Ten questions, live, with a room code.</span></a>
+    <a class="relcard" href="https://cattriviagames.com/museum"><span class="rc-term">Art</span><span class="rc-title">The Cat Museum</span><span class="rc-desc">Public domain cat artworks, then a game.</span></a>
+  </div>
+
+  <footer>
+    <p>Cat facts from <a href="https://cattriviagames.com/">Cat Trivia Games</a>, https://cattriviagames.com, <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC BY 4.0</a>. Sources belong to their publishers and keep their own terms.</p>
+  </footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var LOCAL_URL = "facts.json";
+  var CDN_URL = "https://cdn.jsdelivr.net/gh/cattriviagames/cat-facts-dataset@main/facts.json";
+  var CREDIT = "Cat facts from Cat Trivia Games, https://cattriviagames.com, CC BY 4.0";
+  var CATEGORIES = ["anatomy", "behavior", "history", "breeds", "genetics", "records", "culture", "science"];
+
+  var el = function (id) { return document.getElementById(id); };
+  var factEl = el("fact"), catEl = el("factCat"), statusEl = el("status");
+  var facts = [], current = null, category = "all", lastIds = [];
+
+  function safeUrl(u) { return /^https?:\/\//.test(u) ? u : "#"; }
+  function label(c) { return c.charAt(0).toUpperCase() + c.slice(1); }
+
+  function say(msg) {
+    statusEl.textContent = msg;
+    clearTimeout(say.t);
+    say.t = setTimeout(function () { statusEl.textContent = ""; }, 3000);
+  }
+
+  // updateHash is true only when the visitor asks for a new fact, so a link to a section (#credit) is left alone.
+  // Focus stays on the button that was pressed; the aria-live region reads the new fact.
+  function show(f, updateHash) {
+    current = f;
+    catEl.hidden = false;
+    catEl.className = "chip c-" + f.category;
+    catEl.textContent = label(f.category);
+    factEl.textContent = f.fact;
+    factEl.classList.remove("is-new"); void factEl.offsetWidth; factEl.classList.add("is-new");
+    var s = el("sourceLink"); s.textContent = f.source_title; s.href = safeUrl(f.source_url);
+    el("articleLink").href = safeUrl(f.article_url);
+    el("factSource").hidden = false; el("factArticle").hidden = false;
+    if (updateHash) { try { history.replaceState(null, "", "#" + f.id); } catch (e) {} }
+  }
+
+  function pool() {
+    return category === "all" ? facts : facts.filter(function (f) { return f.category === category; });
+  }
+
+  function next(updateHash) {
+    var p = pool();
+    if (!p.length) return;
+    var choices = p.filter(function (f) { return lastIds.indexOf(f.id) === -1; });
+    if (!choices.length) choices = p;
+    var f = choices[Math.floor(Math.random() * choices.length)];
+    lastIds.push(f.id);
+    if (lastIds.length > Math.min(20, p.length - 1)) lastIds.shift();
+    show(f, updateHash);
+  }
+
+  function copyText(text, done) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+    } else { fallback(text, done); }
+  }
+  function fallback(text, done) {
+    var t = document.createElement("textarea");
+    t.value = text; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0";
+    document.body.appendChild(t); t.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(t);
+    if (ok) done(); else say("Copying is blocked here. Select the text to copy it.");
+  }
+
+  function buildChips() {
+    var wrap = el("chips");
+    ["all"].concat(CATEGORIES).forEach(function (c) {
+      var n = c === "all" ? facts.length : facts.filter(function (f) { return f.category === c; }).length;
+      if (!n) return;
+      var b = document.createElement("button");
+      b.type = "button";
+      b.dataset.cat = c;
+      b.setAttribute("aria-pressed", c === category ? "true" : "false");
+      b.textContent = (c === "all" ? "All" : label(c)) + " (" + n + ")";
+      b.addEventListener("click", function () {
+        category = c; lastIds = [];
+        Array.prototype.forEach.call(wrap.children, function (x) { x.setAttribute("aria-pressed", x.dataset.cat === c ? "true" : "false"); });
+        next(true);
+      });
+      wrap.appendChild(b);
+    });
+    var cats = CATEGORIES.filter(function (c) { return facts.some(function (f) { return f.category === c; }); }).length;
+    el("countLine").textContent = facts.length + " facts in " + cats + " categories.";
+  }
+
+  function start(data) {
+    facts = Array.isArray(data) ? data.filter(function (f) { return f && f.id && f.fact; }) : [];
+    if (!facts.length) { factEl.textContent = "No facts could be loaded."; return; }
+    buildChips();
+    var wanted = decodeURIComponent((location.hash || "").slice(1));
+    var hit = wanted && facts.filter(function (f) { return f.id === wanted; })[0];
+    if (hit) { lastIds.push(hit.id); show(hit, false); } else { next(false); }
+  }
+
+  function load(url) {
+    return fetch(url, { credentials: "omit" }).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    });
+  }
+
+  el("nextBtn").addEventListener("click", function () { next(true); });
+  el("copyBtn").addEventListener("click", function () {
+    if (!current) return;
+    copyText(current.fact + "\nSource: " + current.source_url + "\n" + CREDIT, function () { say("Copied the fact with its source and credit line."); });
+  });
+  el("linkBtn").addEventListener("click", function () {
+    if (!current) return;
+    copyText(location.href.split("#")[0] + "#" + current.id, function () { say("Copied a link to this fact."); });
+  });
+  window.addEventListener("hashchange", function () {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (current && id === current.id) return;
+    var hit = facts.filter(function (f) { return f.id === id; })[0];
+    if (hit) show(hit, false);
+  });
+
+  load(LOCAL_URL).catch(function () { return load(CDN_URL); }).then(start, function () {
+    factEl.textContent = "The facts could not be loaded. Try facts.json directly.";
+  });
+})();
+</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Dataset","name":"Cat facts dataset","description":"An open set of short cat facts from Cat Trivia Games articles. Each fact is one sentence with a category, the outside source it comes from and the article that cites it.","url":"https://cattriviagames.github.io/cat-facts-dataset/","sameAs":"https://github.com/cattriviagames/cat-facts-dataset","image":"https://cattriviagames.com/img/why-do-cats-like-boxes-hero-v1.jpg","license":"https://creativecommons.org/licenses/by/4.0/","isAccessibleForFree":true,"keywords":["cat facts","cats","cat trivia","open data","JSON","CSV"],"creator":{"@type":"Organization","name":"Cat Trivia Games","url":"https://cattriviagames.com/"},"publisher":{"@type":"Organization","name":"Cat Trivia Games","url":"https://cattriviagames.com/"},"distribution":[{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://cdn.jsdelivr.net/gh/cattriviagames/cat-facts-dataset@main/facts.json"},{"@type":"DataDownload","encodingFormat":"text/csv","contentUrl":"https://cdn.jsdelivr.net/gh/cattriviagames/cat-facts-dataset@main/facts.csv"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Cat Facts Dataset: A Random Sourced Cat Fact","description":"Shows a random sourced cat fact from the open Cat Trivia Games cat facts dataset, with its source and a credit line to copy.","url":"https://cattriviagames.github.io/cat-facts-dataset/","image":"https://cattriviagames.com/img/why-do-cats-like-boxes-hero-v1.jpg","applicationCategory":"ReferenceApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"Cat Trivia Games","url":"https://cattriviagames.com/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Cat Trivia Games","item":"https://cattriviagames.com/"},{"@type":"ListItem","position":2,"name":"Cat facts dataset","item":"https://cattriviagames.github.io/cat-facts-dataset/"}]}</script>
+</body>
+</html>
