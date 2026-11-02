@@ -14,7 +14,7 @@ The files are plain JSON and CSV, free to use in apps, bots, quizzes, classrooms
 | `examples/random-fact.js` | Prints a random fact with the credit line (Node 18 or newer). |
 | `examples/random_fact.py` | The same in Python 3, standard library only. |
 | `index.html` | A one-page random fact viewer for GitHub Pages. |
-| `LICENSE` (the full CC BY 4.0 legal code) and `NOTICE.md` (copyright and a plain-language summary) | The license summary and a link to the full legal code. |
+| `LICENSE` and `NOTICE.md` | The full CC BY 4.0 legal code, and a notice with the copyright line and a plain-language summary. |
 
 ## Fields
 
